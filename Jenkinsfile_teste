@@ -24,6 +24,7 @@ pipeline {
             steps {
            
                 sh 'scp /var/lib/jenkins/workspace/webapp-cicd-pipeline/target/*.war osboxes@192.168.59.128:/home/osboxes/prod/apache-tomcat-10.0.7/webapps/webapp.war'
+				sh 'yes'
               }      
            }       
     }
