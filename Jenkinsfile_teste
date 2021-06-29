@@ -16,10 +16,7 @@ pipeline {
    
     stage ('Build') {
       steps {
-      sh '''
-                   sh 'mvn clean package'
-                   sh 'chmod -R 777 /var/lib/jenkins/workspace/webapp-cicd-pipeline/target'
-            ''' 
+      sh 'mvn clean package'
        }
     }
 
