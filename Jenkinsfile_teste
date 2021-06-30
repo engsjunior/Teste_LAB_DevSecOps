@@ -13,7 +13,7 @@ pipeline {
       }
     }
     
-	  stage ('OWASP - Source Composition Analysis') {
+	stage ('OWASP - Source Composition Analysis') {
 		steps {
          sh 'rm owasp* || true'
          sh 'wget "https://raw.githubusercontent.com/engsjunior/Teste_LAB_DevSecOps/main/owasp-dependency-check.sh" '
@@ -24,7 +24,7 @@ pipeline {
 		}
     }
 	
-	 stage ('SAST') {
+	stage ('SAST') {
       steps {
         withSonarQubeEnv('sonar') {
           sh 'mvn sonar:sonar'
@@ -41,14 +41,23 @@ pipeline {
 	   }
     }
 
-	    stage ('Deploy-Webapp-Tomcat') {
-            steps {
+	stage ('Deploy-Webapp-Tomcat') {
+        steps {
            sshagent(['tomcat']) {
                 sh 'scp -o StrictHostKeyChecking=no target/*.war osboxes@192.168.59.128:/home/osboxes/prod/apache-tomcat-10.0.7/webapps/webapp.war'
 				
               }      
            }        
-        }       
+        }
+		
+	stage ('DAST - ZAP BL Scan') {
+      steps {      
+         sh '"docker run -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.59.128:8080/webapp/" || true'
+        }
+    }
+    
+
+		
     }
 
     
