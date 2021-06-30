@@ -13,6 +13,16 @@ pipeline {
       }
     }
     
+	  stage ('Source Composition Analysis - OWASP') {
+		steps {
+         sh 'rm owasp* || true'
+         sh 'wget "https://raw.githubusercontent.com/engsjunior/Teste_LAB_DevSecOps/main/owasp-dependency-check.sh" '
+         sh 'chmod +x owasp-dependency-check.sh'
+         sh 'bash owasp-dependency-check.sh'
+         sh 'cat /var/lib/jenkins/OWASP-Dependency-Check/reports/dependency-check-report.xml'
+        
+		}
+    }
    
     stage ('Build - mvn') {
       steps {
@@ -26,6 +36,7 @@ pipeline {
             steps {
            sshagent(['tomcat']) {
                 sh 'scp -o StrictHostKeyChecking=no target/*.war osboxes@192.168.59.128:/home/osboxes/prod/apache-tomcat-10.0.7/webapps/webapp.war'
+				
               }      
            }        
         }       
