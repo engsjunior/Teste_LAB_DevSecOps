@@ -52,7 +52,7 @@ pipeline {
 		
 	stage ('DAST - ZAP BL Scan') {
       steps {      
-         sh 'docker run -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.59.128:8080/webapp/'
+         sh 'docker run -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.59.128:8080/webapp/ || true'
         }
     }
     
